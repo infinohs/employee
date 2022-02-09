@@ -23,7 +23,7 @@ class HttpClientHelper {
   Future<Response> getLoginApi(
       {String mobileNumber: "", String password: ""}) async {
     return await client.post(Uri.parse(ApiConstants.Login), body: {
-      'mobile': mobileNumber,
+      'email': mobileNumber,
       'password': password,
     });
   }

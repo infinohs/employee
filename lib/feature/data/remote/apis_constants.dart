@@ -1,6 +1,6 @@
 class ApiConstants {
   static final String BASE_URL_RELEASED = "http://admin.arkayahomecare.com/api/";
-  static final String Login = BASE_URL_RELEASED+"login_society_mobile";
+  static final String Login = BASE_URL_RELEASED+"check_zonal_managenr_login";
   static final String getRegistrationPreData = BASE_URL_RELEASED+"admin_society_list";
   static final String getRegistration = BASE_URL_RELEASED+"add_Society_owner_app";
   static final String getActiveComplaint = BASE_URL_RELEASED+"zonal_comp_active";

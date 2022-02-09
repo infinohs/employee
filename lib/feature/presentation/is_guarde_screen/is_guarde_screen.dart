@@ -1,4 +1,4 @@
-import 'package:employee/feature/presentation/login_screen/login_screen.dart';
+import 'package:employee/feature/presentation/user_list_screen/user_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class IsGuardeScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _IsGuardeScreenState extends State<IsGuardeScreen> {
             onTap: () {
               Navigator.of(context).pushReplacement(
                   new MaterialPageRoute(builder: (BuildContext context) {
-                return LoginScreen();
+                return UserListScreen();
               }));
             },
             child: Container(
