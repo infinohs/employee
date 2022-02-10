@@ -3,6 +3,7 @@ import 'package:employee/core/app_colors.dart';
 import 'package:employee/feature/data/local/local_index.dart';
 import 'package:employee/feature/data/local/shared_pref.dart';
 import 'package:employee/feature/presentation/dashboard/dashboard_screen.dart';
+import 'package:employee/feature/presentation/guard_member_screen/guard_member_sceen.dart';
 import 'package:employee/feature/presentation/is_guarde_screen/is_guarde_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,14 +41,22 @@ class _SplashScreenState extends State<SplashScreen> {
                   onFinished: () async {
                     bool islogin =
                         await SharedPref().getBoolValue(LocalIndex().isLogin)!;
+                    bool isGuardlogin = await SharedPref()
+                        .getBoolValue(LocalIndex().isGuardLogin)!;
+
                     if (islogin) {
                       Navigator.of(context).pushReplacement(
                           new MaterialPageRoute(
                               builder: (BuildContext context) {
                         return DashboardScreen();
                       }));
+                    } else if (isGuardlogin) {
+                      Navigator.of(context).pushReplacement(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) {
+                        return GuardMemberScreen();
+                      }));
                     } else {
-
                       Navigator.of(context).pushReplacement(
                           new MaterialPageRoute(
                               builder: (BuildContext context) {

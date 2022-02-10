@@ -1,6 +1,7 @@
 class LocalIndex {
   final String HOME_KEY = 'HOME_KEY';
   final String isLogin = 'ISLOGIN';
+  final String isGuardLogin = 'isGuardLogin';
   final String UserId = 'UserId';
   final String societyId = 'societyId';
    final String username = 'username';
@@ -19,4 +20,5 @@ class LocalIndex {
   final String ChannelPartner = 'Channel Partner';
   final String ZonalManager = 'Zonal Manager';
   final String bpo = 'bpo';
+  final String Guade = 'Guade';
 }

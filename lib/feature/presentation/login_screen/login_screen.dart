@@ -5,8 +5,11 @@ import 'package:employee/core/app_constant.dart';
 import 'package:employee/core/utils.dart';
 import 'package:employee/feature/data/local/local_index.dart';
 import 'package:employee/feature/data/local/shared_pref.dart';
+import 'package:employee/feature/data/remote/apis_constants.dart';
 import 'package:employee/feature/data/remote/http_client_helper.dart';
 import 'package:employee/feature/presentation/dashboard/dashboard_screen.dart';
+import 'package:employee/feature/presentation/guard_member_screen/guard_member_sceen.dart';
+import 'package:employee/feature/presentation/login_screen/domain/guard_login_model.dart';
 import 'package:employee/feature/presentation/login_screen/domain/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -151,8 +154,11 @@ class _LoginScreenState extends State<LoginScreen> {
           await SharedPref().getStringValue(LocalIndex().user_type);
 
       switch (userType) {
-        case "Zonal Manager":
+        case 'Zonal Manager':
           zonalManagerLoginApi();
+          break;
+        case "Guade":
+          GuadeLoginApi();
           break;
       }
     }
@@ -170,6 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
     EasyLoading.show(status: AppConstant.loadingMessage);
     HttpClientHelper()
         .getLoginApi(
+            url: ApiConstants.zonalLogin,
             mobileNumber: _mobileController.text,
             password: _passwordController.text)
         .then((value) {
@@ -191,6 +198,40 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (BuildContext context) {
           return DashboardScreen();
+        }));
+      } else {
+        Utils().snackShow(context, "Login failed");
+      }
+    });
+  }
+
+  void GuadeLoginApi() {
+    EasyLoading.show(status: AppConstant.loadingMessage);
+    HttpClientHelper()
+        .getLoginApi(
+            url: ApiConstants.guadeLogin,
+            mobileNumber: _mobileController.text,
+            password: _passwordController.text)
+        .then((value) {
+      EasyLoading.dismiss();
+      if (value.statusCode == 200 || value.statusCode == 202) {
+        Utils().snackShow(context, "Succeed");
+        SharedPref().putBoolValue(LocalIndex().isGuardLogin, true);
+        GuardLoginModel response =
+            GuardLoginModel.fromJson(jsonDecode(value.body));
+        SharedPref()
+            .putIntValue(LocalIndex().UserId, response.securityGuard!.id!);
+        SharedPref().putStringValue(
+            LocalIndex().username, response.securityGuard!.name!);
+        SharedPref()
+            .putStringValue(LocalIndex().email, response.securityGuard!.email!);
+        SharedPref().putStringValue(
+            LocalIndex().mobile, response.securityGuard!.mobile!);
+        SharedPref().putStringValue(
+            LocalIndex().profile_img, response.securityGuard!.image!);
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(builder: (BuildContext context) {
+          return GuardMemberScreen();
         }));
       } else {
         Utils().snackShow(context, "Login failed");

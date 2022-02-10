@@ -21,8 +21,8 @@ class HttpClientHelper {
   }
 
   Future<Response> getLoginApi(
-      {String mobileNumber: "", String password: ""}) async {
-    return await client.post(Uri.parse(ApiConstants.Login), body: {
+      {String url:"",String mobileNumber: "", String password: ""}) async {
+    return await client.post(Uri.parse(url), body: {
       'email': mobileNumber,
       'password': password,
     });
