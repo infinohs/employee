@@ -2,9 +2,9 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:employee/core/app_colors.dart';
 import 'package:employee/feature/data/local/local_index.dart';
 import 'package:employee/feature/data/local/shared_pref.dart';
-import 'package:employee/feature/presentation/dashboard/dashboard_screen.dart';
 import 'package:employee/feature/presentation/guard_member_screen/guard_member_sceen.dart';
 import 'package:employee/feature/presentation/is_guarde_screen/is_guarde_screen.dart';
+import 'package:employee/feature/presentation/zonal_manager_module/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

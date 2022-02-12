@@ -7,10 +7,10 @@ import 'package:employee/feature/data/local/local_index.dart';
 import 'package:employee/feature/data/local/shared_pref.dart';
 import 'package:employee/feature/data/remote/apis_constants.dart';
 import 'package:employee/feature/data/remote/http_client_helper.dart';
-import 'package:employee/feature/presentation/dashboard/dashboard_screen.dart';
-import 'package:employee/feature/presentation/guard_member_screen/guard_member_sceen.dart';
+ import 'package:employee/feature/presentation/guard_member_screen/guard_member_sceen.dart';
 import 'package:employee/feature/presentation/login_screen/domain/guard_login_model.dart';
 import 'package:employee/feature/presentation/login_screen/domain/login_model.dart';
+import 'package:employee/feature/presentation/zonal_manager_module/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
             password: _passwordController.text)
         .then((value) {
       EasyLoading.dismiss();
-      if (value.statusCode == 200 || value.statusCode == 202) {
+      if (value.statusCode == 200 ) {
         Utils().snackShow(context, "Succeed");
         LoginModel loginModel = LoginModel.fromJson(jsonDecode(value.body));
         SharedPref().putBoolValue(LocalIndex().isLogin, true);

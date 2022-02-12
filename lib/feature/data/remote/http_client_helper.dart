@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:http/http.dart';
-import 'package:http_interceptor/http/http.dart';
 import 'package:employee/feature/data/local/local_index.dart';
 import 'package:employee/feature/data/local/shared_pref.dart';
 import 'package:employee/feature/data/remote/apis_constants.dart';
 import 'package:employee/feature/data/remote/logging_interceptor.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart';
+import 'package:http_interceptor/http/http.dart';
 
 class HttpClientHelper {
   static final HttpClientHelper _instance = HttpClientHelper._internal();
@@ -21,23 +21,25 @@ class HttpClientHelper {
   }
 
   Future<Response> getLoginApi(
-      {String url:"",String mobileNumber: "", String password: ""}) async {
+      {String url: "", String mobileNumber: "", String password: ""}) async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    var fcmToken = await messaging.getToken();
     return await client.post(Uri.parse(url), body: {
       'email': mobileNumber,
       'password': password,
+      'registration_id': fcmToken
     });
   }
 
   Future<Response> askEntryApi(
-      {String url:"",String mobileNumber: "", String password: ""}) async {
+      {String url: "", String mobileNumber: "", String password: ""}) async {
     return await client.post(Uri.parse(url), body: {
       'email': mobileNumber,
       'password': password,
     });
   }
 
-  Future<Response> getFlats(
-      {String securityGuardId:""}) async {
+  Future<Response> getFlats({String securityGuardId: ""}) async {
     return await client.post(Uri.parse(ApiConstants.getFlats), body: {
       'security_guard_id': securityGuardId,
     });
@@ -51,12 +53,21 @@ class HttpClientHelper {
   }
 
   Future<Response> getComplaintActive(String userId) async {
-    return await client.post(Uri.parse(ApiConstants.getActiveComplaint),
+    return await client.post(Uri.parse(ApiConstants.getZonalActiveComplaint),
         headers: {
           "Content-Type": "application/json",
           'Accept': 'application/json',
         },
-        body: jsonEncode(<String, String>{'user_id': userId}));
+        body: jsonEncode(<String, String>{'zonal_id': userId}));
+  }
+
+  Future<Response> getZonalResponse(String userId) async {
+    return await client.post(Uri.parse(ApiConstants.get_employee_count),
+        headers: {
+          "Content-Type": "application/json",
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(<String, String>{'zonal_id': userId}));
   }
 
   Future<Response> getProfileDetailApi() async {
@@ -116,21 +127,21 @@ class HttpClientHelper {
   }
 
   Future<Response> getComplaintComplited(String userId) async {
-    return await client.post(Uri.parse(ApiConstants.getCompletedComplaint),
+    return await client.post(Uri.parse(ApiConstants.getZonalCompletedComplaint),
         headers: {
           "Content-Type": "application/json",
           'Accept': 'application/json',
         },
-        body: jsonEncode(<String, String>{'user_id': userId}));
+        body: jsonEncode(<String, String>{'zonal_id': userId}));
   }
 
   Future<Response> getComplaintPending(String userId) async {
-    return await client.post(Uri.parse(ApiConstants.getCompletedPending),
+    return await client.post(Uri.parse(ApiConstants.getZonalCompletedPending),
         headers: {
           "Content-Type": "application/json",
           'Accept': 'application/json',
         },
-        body: jsonEncode(<String, String>{'user_id': userId}));
+        body: jsonEncode(<String, String>{'zonal_id': userId}));
   }
 
   Future<Response> getServicesApi(String society_id) async {
@@ -189,8 +200,6 @@ class HttpClientHelper {
           'description': description,
         }));
   }
-
-
 
 //
 //   Future<Response> getBanner() async {

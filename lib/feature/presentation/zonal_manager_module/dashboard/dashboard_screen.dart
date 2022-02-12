@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:employee/feature/presentation/dashboard/complaint_screen/complaint_screen.dart';
-import 'package:employee/feature/presentation/dashboard/home/home_screen.dart';
 import 'package:employee/feature/presentation/notification_screen/notification_screen.dart';
-import 'package:employee/feature/presentation/profile_screen/profile_screen.dart';
-
-
+import 'package:employee/feature/presentation/zonal_manager_module/dashboard/complaint_screen/complaint_screen.dart';
+import 'package:employee/feature/presentation/zonal_manager_module/dashboard/home/home_screen.dart';
+import 'package:employee/feature/presentation/zonal_manager_module/dashboard/zonal_employee_screen/zonal_employee_screen.dart';
+import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -18,7 +16,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     ComplaintScreen(),
-    ProfileScreen(),
+    ZonalEmployeeScreen(),
     NotificationScreen(),
   ];
 
@@ -67,4 +65,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 }
-

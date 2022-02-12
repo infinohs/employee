@@ -8,9 +8,9 @@ class ActiveComplaintsModel {
 }
 
   ActiveComplaintsModel.fromJson(dynamic json) {
-    if (json['active'] != null) {
+    if (json['complaints'] != null) {
       _active = [];
-      json['active'].forEach((v) {
+      json['complaints'].forEach((v) {
         _active?.add(Active.fromJson(v));
       });
     }

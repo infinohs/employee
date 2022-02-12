@@ -1,9 +1,9 @@
+import 'package:employee/feature/presentation/zonal_manager_module/dashboard/home/domain/services_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:employee/core/app_constant.dart';
 import 'package:employee/core/utils.dart';
 import 'package:employee/feature/data/remote/http_client_helper.dart';
-import 'package:employee/feature/presentation/dashboard/home/domain/services_model.dart';
 
 class ServiceDetailScreen extends StatefulWidget {
   Services service;
