@@ -6,17 +6,17 @@ import 'package:employee/core/utils.dart';
 import 'package:employee/feature/data/local/local_index.dart';
 import 'package:employee/feature/data/local/shared_pref.dart';
 import 'package:employee/feature/data/remote/apis_constants.dart';
-import 'package:employee/feature/data/remote/http_client_helper.dart';
 import 'package:employee/feature/presentation/guard_member_screen/domain/flats_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 class GuardFormScreen extends StatefulWidget {
   Flats? flats;
 
   late File imageLoadFromGallary;
+
   GuardFormScreen(this.flats);
 
   @override
@@ -26,6 +26,21 @@ class GuardFormScreen extends StatefulWidget {
 class _GuardFormScreenState extends State<GuardFormScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _mobController = TextEditingController();
+  late File imageLoadFromGallary;
+  int imageHolder = 0;
+
+  loadImageFromLocalStorage() async {
+    final ImagePicker _picker = ImagePicker();
+    XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image?.path != null) {
+      imageLoadFromGallary = File(image!.path);
+      setState(() {
+        if (imageLoadFromGallary != null) {
+          imageHolder = 1;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +63,30 @@ class _GuardFormScreenState extends State<GuardFormScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ClipOval(
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    width: 100,
-                    height: 100,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    imageUrl: "",
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                GestureDetector(
+                  onTap: () {
+                    loadImageFromLocalStorage();
+                  },
+                  child: ClipOval(
+                    child: imageHolder == 1
+                        ? Image.file(
+                            imageLoadFromGallary,
+                            width: 100.0,
+                            height: 100.0,
+                            fit: BoxFit.fitHeight,
+                          )
+                        : ClipOval(
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              width: 100,
+                              height: 100,
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              imageUrl: "",
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -102,7 +133,8 @@ class _GuardFormScreenState extends State<GuardFormScreen> {
   void apiAskApprovalCall() {
     EasyLoading.show(status: AppConstant.loadingMessage);
 
-    updateProfileDetailApi(_nameController.text, _mobController.text, imageLoadFromGallary)
+    updateProfileDetailApi(
+            _nameController.text, _mobController.text, imageLoadFromGallary)
         .then((value) {
       EasyLoading.dismiss();
       http.Response.fromStream(value).then((onValue) {
@@ -112,11 +144,11 @@ class _GuardFormScreenState extends State<GuardFormScreen> {
       });
     });
   }
-  updateProfileDetailApi(
-      String userName, String mobile, File ImageFile) async {
+
+  updateProfileDetailApi(String userName, String mobile, File ImageFile) async {
     int userId = await SharedPref().getIntValue(LocalIndex().UserId);
     var request =
-    http.MultipartRequest('POST', Uri.parse(ApiConstants.updateUserDetail));
+        http.MultipartRequest('POST', Uri.parse(ApiConstants.updateUserDetail));
     request.files.add(http.MultipartFile(
         'file', ImageFile.readAsBytes().asStream(), ImageFile.lengthSync(),
         filename: ImageFile.path.split("/").last));
