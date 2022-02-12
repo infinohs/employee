@@ -28,6 +28,21 @@ class HttpClientHelper {
     });
   }
 
+  Future<Response> askEntryApi(
+      {String url:"",String mobileNumber: "", String password: ""}) async {
+    return await client.post(Uri.parse(url), body: {
+      'email': mobileNumber,
+      'password': password,
+    });
+  }
+
+  Future<Response> getFlats(
+      {String securityGuardId:""}) async {
+    return await client.post(Uri.parse(ApiConstants.getFlats), body: {
+      'security_guard_id': securityGuardId,
+    });
+  }
+
   Future<Response> getRegistrationDropDownApi(
       {String mobileNumber: "", String password: ""}) async {
     return await client.post(
