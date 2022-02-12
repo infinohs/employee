@@ -12,5 +12,6 @@ class ApiConstants {
   static final String setComplaint = BASE_URL_RELEASED+"add_complaint";
   static final String getUserDetail = BASE_URL_RELEASED+"edit_user_profile";
   static final String updateUserDetail = BASE_URL_RELEASED+"upload_profile_picture";
+  static final String flat_guest_on_gate = BASE_URL_RELEASED+"flat_guest_on_gate";
   static final String getFlats = BASE_URL_RELEASED+"get_flats";
 }

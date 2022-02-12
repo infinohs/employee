@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:employee/core/app_constant.dart';
 import 'package:employee/core/utils.dart';
-import 'package:employee/feature/data/local/local_index.dart';
-import 'package:employee/feature/data/local/shared_pref.dart';
 import 'package:employee/feature/data/remote/apis_constants.dart';
 import 'package:employee/feature/presentation/guard_member_screen/domain/flats_model.dart';
 import 'package:flutter/material.dart';
@@ -113,6 +111,9 @@ class _GuardFormScreenState extends State<GuardFormScreen> {
                   border: UnderlineInputBorder(),
                   counterText: ""),
             ),
+            SizedBox(
+              height: 30,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -134,25 +135,35 @@ class _GuardFormScreenState extends State<GuardFormScreen> {
     EasyLoading.show(status: AppConstant.loadingMessage);
 
     updateProfileDetailApi(
-            _nameController.text, _mobController.text, imageLoadFromGallary)
+            _nameController.text,
+            _mobController.text,
+            widget.flats!.societyId!,
+            widget.flats!.id!.toString(),
+            imageLoadFromGallary)
         .then((value) {
       EasyLoading.dismiss();
       http.Response.fromStream(value).then((onValue) {
         if (value.statusCode == 200) {
-          Utils().snackShow(context, "Succeed");
+          Utils().snackShow(context, "Raised Succesfully");
+        } else {
+          Utils().snackShow(context, "Failed to raised");
         }
       });
     });
   }
 
-  updateProfileDetailApi(String userName, String mobile, File ImageFile) async {
-    int userId = await SharedPref().getIntValue(LocalIndex().UserId);
-    var request =
-        http.MultipartRequest('POST', Uri.parse(ApiConstants.updateUserDetail));
+  updateProfileDetailApi(String userName, String mobile, String society_id,
+      String flat_id, File ImageFile) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(ApiConstants.flat_guest_on_gate));
     request.files.add(http.MultipartFile(
-        'file', ImageFile.readAsBytes().asStream(), ImageFile.lengthSync(),
+        'image', ImageFile.readAsBytes().asStream(), ImageFile.lengthSync(),
         filename: ImageFile.path.split("/").last));
-    request.fields["id"] = userId.toString();
+    request.fields["society_id"] = society_id;
+    request.fields["name"] = userName;
+    request.fields["mobile"] = mobile;
+    request.fields["flat_id"] = flat_id;
+
     return await request.send();
   }
 }
