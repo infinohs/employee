@@ -5,6 +5,7 @@ import 'package:employee/core/app_constant.dart';
 import 'package:employee/core/utils.dart';
 import 'package:employee/feature/data/remote/apis_constants.dart';
 import 'package:employee/feature/presentation/guard_member_screen/domain/flats_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -154,6 +155,10 @@ class _GuardFormScreenState extends State<GuardFormScreen> {
 
   updateProfileDetailApi(String userName, String mobile, String society_id,
       String flat_id, File ImageFile) async {
+
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    var fcmToken = await messaging.getToken();
     var request = http.MultipartRequest(
         'POST', Uri.parse(ApiConstants.flat_guest_on_gate));
     request.files.add(http.MultipartFile(
@@ -163,6 +168,7 @@ class _GuardFormScreenState extends State<GuardFormScreen> {
     request.fields["name"] = userName;
     request.fields["mobile"] = mobile;
     request.fields["flat_id"] = flat_id;
+    request.fields["registration_id"] = fcmToken.toString();
 
     return await request.send();
   }
